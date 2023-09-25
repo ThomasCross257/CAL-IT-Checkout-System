@@ -15,6 +15,13 @@ class CheckedOut(db.Model):
     laptop_id = db.Column(db.Integer, db.ForeignKey('laptop.id'), nullable=False)
     user_fname = db.Column(db.String(50))
     user_lname = db.Column(db.String(50))
+    user_coyoteID = db.Column(db.Integer)
+    user_address = db.Column(db.String(100))
     checked_out_date = db.Column(db.DateTime, default=datetime.utcnow)
     return_date = db.Column(db.DateTime)
     returned = db.Column(db.Boolean, default=False)
+class Admin(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50), nullable=False)
+    password_hash = db.Column(db.String(100), nullable=False)
+    password_salt = db.Column(db.String(50), nullable=False)
