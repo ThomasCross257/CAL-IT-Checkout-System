@@ -6,17 +6,21 @@
 </head>
 <body>
         {% block content %}
-        <form method="post" action="/admin-login">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" class="form-control" id="first-name" name="username" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="text" class="form-control" id="last-name" name="password" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+        <div class="container">
+            <button type="button" class="btn btn-primary"><a href="/dashboard">Admin Dashboard</a></button>
+            <h1>Admin Login</h1>
+            <form method="post" action="/admin-login">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="first-name" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="text" class="form-control" id="last-name" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
         {% endblock %}
 </body>
 </html>

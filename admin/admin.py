@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, request, sessio
 from models.db_model import Laptop, db
 from app import app
 
-adminBP = Blueprint('admin', __name__, template_folder='templates', url_prefix="/admin")
+adminBP = Blueprint('admin', __name__, template_folder='templates')
 
 @adminBP.route('/dashboard')
 def dashboard():

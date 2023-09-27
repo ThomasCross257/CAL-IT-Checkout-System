@@ -1,11 +1,25 @@
 from app import app
 from flask import redirect, url_for, render_template, session, request
 from admin.admin import adminBP
-from models.db_model import db, CheckedOut
+from models.db_model import db, CheckedOut, Admin
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 app.register_blueprint(adminBP)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///laptop.db'
 db.init_app(app)
+app.config['ADMIN_PASS'] = os.getenv('ADMIN_PASS')
+
+with app.app_context():
+    if 'admin' not in db.session:
+        admin = Admin(username='admin')
+        admin.set_password(os.getenv('ADMIN_PASSWORD'))
+        db.session.add(admin)
+        db.session.commit()
+    else:
+        pass
 
 @app.route("/")
 def home():
