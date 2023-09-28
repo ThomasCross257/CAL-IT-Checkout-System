@@ -10,7 +10,7 @@ class Laptop(db.Model):
     tag = db.Column(db.Integer, nullable=False)
     serial = db.Column(db.String(50), nullable=False)
     name = db.Column(db.String(50), nullable=False)
-    make = db.relationship('Make', backref=db.backref('laptops', lazy=True))
+    make = db.Column(db.String(25), nullable=False)
 
 class CheckedOut(db.Model):
     id = db.Column(db.Integer, primary_key=True)

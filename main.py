@@ -12,8 +12,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///laptop.db'
 db.init_app(app)
 app.config['ADMIN_PASS'] = os.getenv('ADMIN_PASS')
 
+print(os.getenv('ADMIN_PASS'))
+
 with app.app_context():
-    if 'admin' not in db.session:
+    if not Admin.query.filter_by(username='admin').first():
         admin = Admin(username='admin')
         admin.set_password(os.getenv('ADMIN_PASSWORD'))
         db.session.add(admin)
