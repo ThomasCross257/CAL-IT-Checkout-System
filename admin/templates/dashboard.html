@@ -8,9 +8,9 @@
         {% block content %}
         <nav>
             <ul>
-                <li><a href="/admin-dashboard">Home</a></li>
-                <li><a href="/admin-dashboard/laptop-list">Laptop List</a></li>
-                <li><a href="/admin-dashboard/checkout-form">Checkout Form</a></li>
+                <li><a href="{{url_for('home')}}">Home</a></li>
+                <li><a href="{{url_for('laptops')}}">Laptop List</a></li>
+                <li><a href="{{url_for('admin.logout')}}">Logout</a></li>
             </ul>
         </nav>
         <div class="container">

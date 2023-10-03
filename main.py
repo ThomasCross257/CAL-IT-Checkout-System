@@ -1,7 +1,7 @@
 from app import app
 from flask import redirect, url_for, render_template, session, request
 from admin.admin import adminBP
-from models.db_model import db, CheckedOut, Admin
+from models.db_model import db, CheckedOut
 from dotenv import load_dotenv
 import os
 
@@ -11,17 +11,8 @@ app.register_blueprint(adminBP)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///laptop.db'
 db.init_app(app)
 app.config['ADMIN_PASS'] = os.getenv('ADMIN_PASS')
-
-print(os.getenv('ADMIN_PASS'))
-
-with app.app_context():
-    if not Admin.query.filter_by(username='admin').first():
-        admin = Admin(username='admin')
-        admin.set_password(os.getenv('ADMIN_PASSWORD'))
-        db.session.add(admin)
-        db.session.commit()
-    else:
-        pass
+app.config['ADMIN_USER'] = os.getenv('ADMIN_USER')
+app.secret_key = os.getenv('SECRET_KEY')
 
 @app.route("/")
 def home():

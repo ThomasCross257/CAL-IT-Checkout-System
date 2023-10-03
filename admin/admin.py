@@ -4,14 +4,14 @@ from app import app
 
 adminBP = Blueprint('admin', __name__, template_folder='templates')
 
-@adminBP.route('/dashboard')
+@adminBP.route('/admin-dashboard')
 def dashboard():
     return render_template('dashboard.html')
 
-@adminBP.route('/login', methods=['GET', 'POST'])
+@adminBP.route('/admin-login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        if request.form['username'] == app.config['ADMIN_USERNAME'] and request.form['password'] == app.config['ADMIN_PASSWORD']:
+        if request.form['username'] == app.config['ADMIN_USER'] and request.form['password'] == app.config['ADMIN_PASS']:
             session['admin'] = True
             return redirect(url_for('admin.dashboard'))
         else:
