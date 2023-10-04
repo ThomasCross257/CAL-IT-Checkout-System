@@ -1,7 +1,7 @@
 from app import app
 from flask import redirect, url_for, render_template, session, request
 from admin.admin import adminBP
-from models.db_model import db, CheckedOut
+from models.db_model import db, CheckedOut, Laptop
 from dotenv import load_dotenv
 import os
 
@@ -26,7 +26,8 @@ def laptops():
     if 'admin' in session:
         return redirect(url_for('admin.dashboard'))
     else:
-        return render_template('laptopList.html')
+        laptops = CheckedOut.query.all()
+        return render_template('laptopList.html', laptops=laptops)
 
 @app.route("/checkout" , methods=['GET', 'POST'])
 def checkout(checkedOut):

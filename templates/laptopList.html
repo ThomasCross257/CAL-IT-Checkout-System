@@ -5,7 +5,6 @@
     {% block title %}Choose a Laptop{% endblock %}
 </head>
 <body>
-    {% endblock %}
         {% block content %}
         <div class="container">
             <h2>Please select a laptop</h2>
@@ -13,7 +12,7 @@
                 {% for laptop in laptops %}
                 <li><a href="{{ url_for('laptop', id=laptop.id) }}">
                     <div class="card" style="width: 18rem;">
-                        <img src="..." class="card-img-top" alt="...">
+                        <img src="..\img\Macbook.jpg" class="card-img-top" alt="...">
                         <div class="card-body">
                           <h5 class="card-title">{{laptop.make}}</h5>
                         </div>
