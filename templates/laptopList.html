@@ -12,7 +12,7 @@
                 {% for laptop in laptops %}
                 <li><a href="{{ url_for('laptop', id=laptop.id) }}">
                     <div class="card" style="width: 18rem;">
-                        <img src="..\img\Macbook.jpg" class="card-img-top" alt="...">
+                        <img src="{{ url_for('static', filename='Macbook.jpg') }}" class="card-img-top">
                         <div class="card-body">
                           <h5 class="card-title">{{laptop.make}}</h5>
                         </div>

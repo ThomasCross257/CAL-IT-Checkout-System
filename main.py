@@ -1,9 +1,10 @@
 from app import app
-from flask import redirect, url_for, render_template, session, request
+from flask import redirect, url_for, render_template, session, request, Response
 from admin.admin import adminBP
 from models.db_model import db, CheckedOut, Laptop
 from dotenv import load_dotenv
 import os
+from tagDetector import tagDetect
 
 load_dotenv()
 
@@ -13,6 +14,7 @@ db.init_app(app)
 app.config['ADMIN_PASS'] = os.getenv('ADMIN_PASS')
 app.config['ADMIN_USER'] = os.getenv('ADMIN_USER')
 app.secret_key = os.getenv('SECRET_KEY')
+TessPath = os.getenv('TESSPATH')
 
 @app.route("/")
 def home():
@@ -26,8 +28,21 @@ def laptops():
     if 'admin' in session:
         return redirect(url_for('admin.dashboard'))
     else:
-        laptops = CheckedOut.query.all()
+        laptops = Laptop.query.all()
         return render_template('laptopList.html', laptops=laptops)
+    
+@app.route("/laptops/<int:id>")
+def laptop(id):
+    if 'admin' in session:
+        return redirect(url_for('admin.dashboard'))
+    else:
+        laptop = Laptop.query.get(id)
+        return render_template('laptop.html', laptop=laptop)
+    
+@app.route("/returnLaptop")
+def returnLaptop():
+    return render_template('returnpage.html')
+
 
 @app.route("/checkout" , methods=['GET', 'POST'])
 def checkout(checkedOut):
@@ -48,6 +63,11 @@ def checkout(checkedOut):
 @app.route("/success")
 def success():
     return render_template('success.html')
+
+@app.route("/scanner")
+def scanner():
+    return Response(tagDetect, 
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == "__main__":
     with app.app_context():

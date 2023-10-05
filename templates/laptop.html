@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% extends 'base.html' %}
+    {% block title %} {{laptop.name}} {% endblock %}
+</head>
+<body>
+        {% block content %}
+        <div class="container text-center">
+          <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Laptop Information</h5>
+                <p class="card-text">Tag: {{ laptop.tag }}</p>
+                <p class="card-text">Serial: {{ laptop.serial }}</p>
+                <p class="card-text">Name: {{ laptop.name }}</p>
+                <p class="card-text">Make: {{ laptop.make }}</p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                  <a href="{{url_for ('checkout' id=laptop.id)}}"<button class="btn btn-success me-md-2" type="button">Accept</button>
+                  <button class="btn btn-danger" type="button">Decline</button>
+                </div>
+              </div>
+            </div>
+      </div>
+        {% endblock %}
+</body>
+</html>
