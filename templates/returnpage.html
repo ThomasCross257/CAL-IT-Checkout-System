@@ -6,16 +6,8 @@
 </head>
 <body>
         {% block content %}
-        <a href="/admin-login"><button class="btn btn-danger">Login</button></a>
-            <div class="container text-center">
-                <h1> Welcome to the CAL IT Laptop Checkout System</h1>
-                <a href="{{url_for('laptops')}}">
-                    <button class="btn btn-primary">Tap Here to begin</button>
-                </a>
-                <br>
-                <br>
-                <button class="btn btn-success">Returning a Laptop?</button>
-            </div>
+        <h1>Please scan the tag number below</h1>
+        <img src="{{ url_for('scanner') }}" width="640" height="480">
         {% endblock %}
 </body>
 </html>
