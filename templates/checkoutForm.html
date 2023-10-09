@@ -5,7 +5,6 @@
     {% block title %}Confirm your selection{% endblock %}
 </head>
 <body>
-    {% endblock %}
         {% block content %}
         <div class="container">
             <form method="post" action="/submit-form">
@@ -18,8 +17,16 @@
                 <input type="text" class="form-control" id="last-name" name="last_name" required>
               </div>
               <div class="form-group">
-                <label for="address">Home Address</label>
-                <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+                <label for="tag-number">Tag Number</label>
+                <input type="text" class="form-control" id="tag-number" name="tag_number" required>
+              </div>
+              <div class="form-group">
+                <label for="serial-number">Serial Number</label>
+                <input type="text" class="form-control" id="serial-number" name="serial_number" required>
+              </div>
+              <div class="form-group">
+                <label for="coyote-id">Coyote ID</label>
+                <input type="text" class="form-control" id="coyote-id" name="coyote_id" required>
               </div>
               <div class="form-group">
                 <label for="make-model">Make and Model</label>
@@ -33,13 +40,9 @@
                 <label for="return-date">Date Returned</label>
                 <input type="date" class="form-control" id="return-date" name="return_date" required>
               </div>
-              <div class="form-group">
-                <label for="retail-value">Retail Value</label>
-                <input type="number" class="form-control" id="retail-value" name="retail_value" required>
-              </div>
               <div class="form-group form-check">
                 <input type="checkbox" class="form-check-input" id="off-campus-policy" name="off_campus_policy" required>
-                <label class="form-check-label" for="off-campus-policy">I acknowledge the off-campus policy</label>
+                <label class="form-check-label" for="off-campus-policy">I acknowledge that this laptop will not be taken off-campus</label>
               </div>
               <button type="submit" class="btn btn-primary">Submit</button>
             </form>

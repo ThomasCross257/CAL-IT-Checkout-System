@@ -6,7 +6,7 @@ adminBP = Blueprint('admin', __name__, template_folder='templates')
 
 @adminBP.route('/admin-dashboard')
 def dashboard():
-    return render_template('dashboard.html')
+    return render_template('dashboard.html', laptops=Laptop.query.all())
 
 @adminBP.route('/admin-login', methods=['GET', 'POST'])
 def login():

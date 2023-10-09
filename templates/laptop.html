@@ -15,7 +15,9 @@
                 <p class="card-text">Name: {{ laptop.name }}</p>
                 <p class="card-text">Make: {{ laptop.make }}</p>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                  <a href="{{url_for ('checkout' id=laptop.id)}}"<button class="btn btn-success me-md-2" type="button">Accept</button>
+                  <a href="{{url_for ('checkout', id=laptop.id)}}">
+                    <button class="btn btn-success me-md-2" type="button">Accept</button>
+                  </a>
                   <button class="btn btn-danger" type="button">Decline</button>
                 </div>
               </div>

@@ -4,7 +4,6 @@ from admin.admin import adminBP
 from models.db_model import db, CheckedOut, Laptop
 from dotenv import load_dotenv
 import os
-from tagDetector import tagDetect
 
 load_dotenv()
 
@@ -39,13 +38,25 @@ def laptop(id):
         laptop = Laptop.query.get(id)
         return render_template('laptop.html', laptop=laptop)
     
-@app.route("/returnLaptop")
+@app.route("/returnLaptop", methods=['GET', 'POST'])
 def returnLaptop():
+    if request.method == 'POST':
+        tagNum = request.form['tag']
+        laptop = Laptop.query.filter_by(tagNum=tagNum).first()
+        if laptop:
+            if laptop.checkedOut == True:
+                laptop.checkedOut = False
+                db.session.commit()
+                return redirect(url_for('returnLaptop', returned=True))
+            else:
+                return render_template('returnpage.html', error="Laptop is not checked out")
+        else:
+            return render_template('returnpage.html', error="Laptop does not exist")
     return render_template('returnpage.html')
 
 
 @app.route("/checkout" , methods=['GET', 'POST'])
-def checkout(checkedOut):
+def checkout():
     if request.method == 'POST':
         user_fname = request.form['user_fname']
         user_lname = request.form['user_lname']
@@ -58,16 +69,11 @@ def checkout(checkedOut):
         db.session.add(checkedOut)
         db.session.commit()
         return redirect(url_for('success'))
-    return render_template('checkout.html')
+    return render_template('checkoutForm.html')
 
 @app.route("/success")
 def success():
     return render_template('success.html')
-
-@app.route("/scanner")
-def scanner():
-    return Response(tagDetect, 
-                    mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == "__main__":
     with app.app_context():
