@@ -1,12 +1,15 @@
 from flask import Blueprint, render_template, redirect, url_for, request, session, url_for, flash
-from models.db_model import Laptop, db
+from models.db_model import CheckedOut, db, Laptop
 from app import app
 
 adminBP = Blueprint('admin', __name__, template_folder='templates')
 
 @adminBP.route('/admin-dashboard')
 def dashboard():
-    return render_template('dashboard.html', laptops=Laptop.query.all())
+    if 'admin' not in session:
+        return redirect(url_for('admin.login'))
+    else:
+        return render_template('dashboard.html', laptops=Laptop.query.all())
 
 @adminBP.route('/admin-login', methods=['GET', 'POST'])
 def login():
@@ -38,3 +41,8 @@ def add_laptop():
         return redirect(url_for('admin.dashboard'))
     else:
         return render_template('add_laptop.html')
+    
+@adminBP.route('/checkoutHistory/<id>')
+def checkoutHistory(id):
+    laptopHistory = CheckedOut.query.filter_by(laptop_id=id).all()
+    return render_template('laptopHistory.html', history = laptopHistory)

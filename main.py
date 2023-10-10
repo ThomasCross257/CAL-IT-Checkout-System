@@ -52,11 +52,13 @@ def returnLaptop():
                 return render_template('returnpage.html', error="Laptop is not checked out")
         else:
             return render_template('returnpage.html', error="Laptop does not exist")
+        
     return render_template('returnpage.html')
 
 
-@app.route("/checkout" , methods=['GET', 'POST'])
-def checkout():
+@app.route("/checkout/<id>" , methods=['GET', 'POST'])
+def checkout(id):
+    laptop = Laptop.query.get(id)
     if request.method == 'POST':
         user_fname = request.form['user_fname']
         user_lname = request.form['user_lname']
@@ -69,7 +71,7 @@ def checkout():
         db.session.add(checkedOut)
         db.session.commit()
         return redirect(url_for('success'))
-    return render_template('checkoutForm.html')
+    return render_template('checkoutForm.html', laptop=laptop)
 
 @app.route("/success")
 def success():
