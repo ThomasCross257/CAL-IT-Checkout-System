@@ -35,7 +35,8 @@ def add_laptop():
         name = request.form['name']
         make = request.form['make']
         model = request.form['model']
-        device = Laptop(tag=tag, serial=serial, name=name, make=make, model=model)
+        image = request.form['image']
+        device = Laptop(tag=tag, serial=serial, name=name, make=make, model=model, image=image)
         db.session.add(device)
         db.session.commit()
         return redirect(url_for('admin.dashboard'))
