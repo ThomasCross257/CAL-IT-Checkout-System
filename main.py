@@ -41,18 +41,23 @@ def laptop(id):
 @app.route("/returnLaptop", methods=['GET', 'POST'])
 def returnLaptop():
     if request.method == 'POST':
-        tagNum = request.form['tag']
-        laptop = Laptop.query.filter_by(tagNum=tagNum).first()
+        tagNum = int(request.form['tag'])
+        laptop = Laptop.query.filter_by(tag=tagNum).first()
         if laptop:
-            if laptop.checkedOut == True:
-                laptop.checkedOut = False
-                db.session.commit()
-                return redirect(url_for('returnLaptop', returned=True))
+            inUse = CheckedOut.query.filter_by(laptop_id=laptop.id).first()
+            if inUse:
+                if inUse.returned:
+                    return render_template('returnpage.html', error="Laptop is not checked out")
+                else:
+                    inUse.returned = True
+                    db.session.commit()
+                    return redirect(url_for('returnLaptop', returned=True))
             else:
                 return render_template('returnpage.html', error="Laptop is not checked out")
         else:
             return render_template('returnpage.html', error="Laptop does not exist")
-        
+
+
     return render_template('returnpage.html')
 
 

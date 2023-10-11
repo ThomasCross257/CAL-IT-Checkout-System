@@ -14,15 +14,16 @@
     <form method="post" action="/submit-form">
       <div class="mb-4">
         <label for="first-name" class="block text-sm font-medium text-gray-700">First Name</label>
-        <input type="text" class="form-input" id="first-name" name="first_name" required>
+        <input type="text" class="form-input" id="first-name" name="first_name" required
+          style="border: 1px solid black;">
       </div>
       <div class="mb-4">
         <label for="last-name" class="block text-sm font-medium text-gray-700">Last Name</label>
-        <input type="text" class="form-input" id="last-name" name="last_name" required>
+        <input type="text" class="form-input" id="last-name" name="last_name" required style="border: 1px solid black;">
       </div>
       <div class="mb-4">
         <label for="coyote-id" class="block text-sm font-medium text-gray-700">Coyote ID</label>
-        <input type="text" class="form-input" id="coyote-id" name="coyote_id" required>
+        <input type="text" class="form-input" id="coyote-id" name="coyote_id" required style="border: 1px solid black;">
       </div>
       <hr class="my-4 border-t border-gray-200">
       <div class="mb-4">
@@ -40,7 +41,7 @@
       </div>
       <hr class="my-4 border-t border-gray-200">
       <div class="mb-4">
-        <label for="received-date" class="block text-sm font-medium text-gray-700">Date Received</label>
+        <label for="received-date" class="block text-sm font-medium text-gray-700">Date Lent</label>
         <input type="date" class="form-input" id="received-date" name="received_date" readonly>
       </div>
 
@@ -52,8 +53,9 @@
         document.getElementById("received-date").value = today;
       </script>
       <div class="mb-4">
-        <label for="return-date" class="block text-sm font-medium text-gray-700">Date Returned</label>
-        <input type="date" class="form-input" id="return-date" name="return_date" required>
+        <label for="return-date" class="block text-sm font-medium text-gray-700">Return Date</label>
+        <input type="date" class="form-input" id="return-date" name="return_date" required
+          style="border: 1px solid black;">
       </div>
       <div class="mb-4">
         <input type="checkbox" class="form-checkbox" id="off-campus-policy" name="off_campus_policy" required>

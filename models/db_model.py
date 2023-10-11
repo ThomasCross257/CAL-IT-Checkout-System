@@ -11,6 +11,8 @@ class Laptop(db.Model):
     serial = db.Column(db.String(64), index=True, unique=True)
     name = db.Column(db.String(64), index=True)
     make = db.Column(db.String(64), index=True)
+    model = db.Column(db.String(64), index=True)
+    image = db.Column(db.String(64), index=True)
 
 class CheckedOut(db.Model):
     id = db.Column(db.Integer, primary_key=True)
