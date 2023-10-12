@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% extends 'base.html' %}
+    {% block title %}Success!{% endblock %}
+</head>
+
+<body>
+    {% block content %}
+    <a href="/admin-login"><button
+            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Login</button></a>
+    <div class="container mx-auto text-center">
+        <h1 class="text-3xl font-bold mb-4">Thank you! Please remember to return your laptop by {{ returnDate }}</h1>
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            <a href="{{url_for('home')}}">Return to Home</a>
+        </button>
+    </div>
+    {% endblock %}
+</body>
+
+</html>

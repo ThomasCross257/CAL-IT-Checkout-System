@@ -19,7 +19,7 @@ class CheckedOut(db.Model):
     laptop_id = db.Column(db.Integer, db.ForeignKey('laptop.id'), nullable=False)
     user_fname = db.Column(db.String(50))
     user_lname = db.Column(db.String(50))
-    user_coyoteID = db.Column(db.Integer)
+    user_coyoteID = db.Column(db.String(9))
     user_address = db.Column(db.String(100))
     checked_out_date = db.Column(db.DateTime, default=datetime.utcnow)
     return_date = db.Column(db.DateTime)

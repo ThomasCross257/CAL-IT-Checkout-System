@@ -1,9 +1,11 @@
 from app import app
-from flask import redirect, url_for, render_template, session, request, Response
+from flask import redirect, url_for, render_template, session, request, send_from_directory, flash
 from admin.admin import adminBP
 from models.db_model import db, CheckedOut, Laptop
 from dotenv import load_dotenv
 import os
+from datetime import datetime
+from sqlalchemy import not_
 
 load_dotenv()
 
@@ -12,6 +14,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///laptop.db'
 db.init_app(app)
 app.config['ADMIN_PASS'] = os.getenv('ADMIN_PASS')
 app.config['ADMIN_USER'] = os.getenv('ADMIN_USER')
+app.config['UPLOAD_FOLDER'] = os.getenv('UPLOAD_FOLDER')
 app.secret_key = os.getenv('SECRET_KEY')
 TessPath = os.getenv('TESSPATH')
 
@@ -27,7 +30,7 @@ def laptops():
     if 'admin' in session:
         return redirect(url_for('admin.dashboard'))
     else:
-        laptops = Laptop.query.all()
+        laptops = Laptop.query.outerjoin(CheckedOut).filter(not_(CheckedOut.id.isnot(None))).all()
         return render_template('laptopList.html', laptops=laptops)
     
 @app.route("/laptops/<int:id>")
@@ -46,11 +49,12 @@ def returnLaptop():
         if laptop:
             inUse = CheckedOut.query.filter_by(laptop_id=laptop.id).first()
             if inUse:
-                if inUse.returned:
+                if inUse.returned == True:
                     return render_template('returnpage.html', error="Laptop is not checked out")
                 else:
                     inUse.returned = True
                     db.session.commit()
+                    flash('Laptop returned successfully', 'success')
                     return redirect(url_for('returnLaptop', returned=True))
             else:
                 return render_template('returnpage.html', error="Laptop is not checked out")
@@ -68,19 +72,26 @@ def checkout(id):
         user_fname = request.form['user_fname']
         user_lname = request.form['user_lname']
         user_coyoteID = request.form['user_coyoteID']
-        user_address = request.form['user_address']
+        returned = request.form['return_date']
         checkedOut = CheckedOut(user_fname=user_fname, 
                                 user_lname=user_lname, 
                                 user_coyoteID=user_coyoteID, 
-                                user_address=user_address)
+                                laptop_id=laptop.id,
+                                returned = False,
+                                return_date=datetime.strptime(returned, '%Y-%m-%d')
+        )
         db.session.add(checkedOut)
         db.session.commit()
-        return redirect(url_for('success'))
+        return redirect(url_for('success', returnDate=returned))
     return render_template('checkoutForm.html', laptop=laptop)
 
 @app.route("/success")
 def success():
     return render_template('success.html')
+
+@app.route("/uploads/<filename>", methods=['GET', 'POST'])
+def uploads(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 if __name__ == "__main__":
     with app.app_context():

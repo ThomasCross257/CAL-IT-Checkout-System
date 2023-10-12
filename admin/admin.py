@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, request, session, url_for, flash
 from models.db_model import CheckedOut, db, Laptop
 from app import app
+import os
 
 adminBP = Blueprint('admin', __name__, template_folder='templates')
 
@@ -35,8 +36,10 @@ def add_laptop():
         name = request.form['name']
         make = request.form['make']
         model = request.form['model']
-        image = request.form['image']
-        device = Laptop(tag=tag, serial=serial, name=name, make=make, model=model, image=image)
+        file = request.files['image']
+        filename = file.filename
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        device = Laptop(tag=tag, serial=serial, name=name, make=make, model=model, image=filename)
         db.session.add(device)
         db.session.commit()
         return redirect(url_for('admin.dashboard'))
@@ -47,3 +50,10 @@ def add_laptop():
 def checkoutHistory(id):
     laptopHistory = CheckedOut.query.filter_by(laptop_id=id).all()
     return render_template('laptopHistory.html', history = laptopHistory)
+
+@adminBP.route('/delete/<id>', methods=['GET', 'POST'])
+def deleteEntry(id):
+    entry = Laptop.query.get(id)
+    db.session.delete(entry)
+    db.session.commit()
+    return redirect(url_for('admin.dashboard'))
