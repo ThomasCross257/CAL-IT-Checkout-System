@@ -1,6 +1,5 @@
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin
 # from werkzeug.security import generate_password_hash, check_password_hash, gen_salt
 
 db = SQLAlchemy()
@@ -24,3 +23,7 @@ class CheckedOut(db.Model):
     checked_out_date = db.Column(db.DateTime, default=datetime.utcnow)
     return_date = db.Column(db.DateTime)
     returned = db.Column(db.Boolean, default=False)
+class Admin(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(5))
+    password = db.Column(db.String(255))

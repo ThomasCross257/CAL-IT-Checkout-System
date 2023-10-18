@@ -1,22 +1,19 @@
 from app import app
 from flask import redirect, url_for, render_template, session, request, send_from_directory, flash
 from admin.admin import adminBP
-from models.db_model import db, CheckedOut, Laptop
-from dotenv import load_dotenv
+from werkzeug.security import generate_password_hash
+from models.db_model import db, CheckedOut, Laptop, Admin
+import secrets
 import os
 from datetime import datetime
 from sqlalchemy import not_
 
-load_dotenv()
-
 app.register_blueprint(adminBP)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///laptop.db'
+app.config['UPLOAD_FOLDER'] = '/uploads'
+app.config['SECRET_KEY'] = secrets.token_hex(16)
+
 db.init_app(app)
-app.config['ADMIN_PASS'] = os.getenv('ADMIN_PASS')
-app.config['ADMIN_USER'] = os.getenv('ADMIN_USER')
-app.config['UPLOAD_FOLDER'] = os.getenv('UPLOAD_FOLDER')
-app.secret_key = os.getenv('SECRET_KEY')
-TessPath = os.getenv('TESSPATH')
 
 @app.route("/")
 def home():
@@ -96,5 +93,8 @@ def uploads(filename):
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
+        admin = Admin(username='admin', password=generate_password_hash("password"))
+        db.session.add(admin)
+        db.session.commit()
 
     app.run(debug=True)

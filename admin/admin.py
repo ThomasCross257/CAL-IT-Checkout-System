@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request, session, url_for, flash
-from models.db_model import CheckedOut, db, Laptop
+from werkzeug.security import check_password_hash, generate_password_hash
+from models.db_model import CheckedOut, db, Laptop, Admin
 from app import app
 import os
 
@@ -15,12 +16,14 @@ def dashboard():
 @adminBP.route('/admin-login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        if request.form['username'] == app.config['ADMIN_USER'] and request.form['password'] == app.config['ADMIN_PASS']:
+        adminUser = Admin.query.filter_by(username=request.form['username']).first()
+        password = generate_password_hash(request.form['password'])
+        if check_password_hash(adminUser.password, password):
             session['admin'] = True
             return redirect(url_for('admin.dashboard'))
         else:
             flash('Invalid username or password', 'danger')
-            return redirect(url_for('admin.login'))
+            return redirect(url_for('admin.login', messages='Invalid username or password'))
     return render_template('login.html')
 
 @adminBP.route('/logout')
