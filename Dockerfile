@@ -13,6 +13,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Create a directory for storing uploaded files
 RUN mkdir /uploads
 
+RUN mkdir app/instance
+
 # Set the permissions for the uploads directory
 RUN chmod 777 /uploads
 
@@ -35,4 +37,4 @@ EXPOSE 8000
 VOLUME /uploads
 
 # Run the command to start the Flask application inside the virtual environment
-CMD ["flask", "run", "--host=0.0.0.0"]
+CMD ["gunicorn", "-w", "1", "--threads", "4", "-b", "0.0.0.0:8000", "main:app"]
