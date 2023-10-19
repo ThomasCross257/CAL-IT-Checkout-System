@@ -29,7 +29,7 @@ ENV FLASK_APP=main.py
 ENV FLASK_ENV=production
 
 # Expose port 5000 for the Flask application
-EXPOSE 5000
+EXPOSE 8000
 
 # Mount the uploads directory as a volume
 VOLUME /uploads
