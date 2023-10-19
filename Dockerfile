@@ -35,4 +35,4 @@ EXPOSE 8000
 VOLUME /uploads
 
 # Run the command to start the Flask application inside the virtual environment
-CMD ["gunicorn", "-w", "1", "--threads", "4", "-b", "0.0.0.0:8000", "main:app"]
+CMD ["flask", "run", "--host=0.0.0.0"]
