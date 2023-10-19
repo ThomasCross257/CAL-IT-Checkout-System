@@ -11,6 +11,7 @@ class Laptop(db.Model):
     name = db.Column(db.String(64), index=True)
     make = db.Column(db.String(64), index=True)
     model = db.Column(db.String(64), index=True)
+    year = db.Column(db.Integer, index=True)
     image = db.Column(db.String(64), index=True)
 
 class CheckedOut(db.Model):

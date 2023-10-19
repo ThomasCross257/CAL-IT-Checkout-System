@@ -1,16 +1,16 @@
 from app import app
 from flask import redirect, url_for, render_template, session, request, send_from_directory, flash
 from admin.admin import adminBP
-from werkzeug.security import generate_password_hash
+import bcrypt
 from models.db_model import db, CheckedOut, Laptop, Admin
 import secrets
 import os
 from datetime import datetime
-from sqlalchemy import not_
+from sqlalchemy import or_
 
 app.register_blueprint(adminBP)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///laptop.db'
-app.config['UPLOAD_FOLDER'] = '/uploads'
+app.config['UPLOAD_FOLDER'] = './uploads'
 app.config['SECRET_KEY'] = secrets.token_hex(16)
 
 db.init_app(app)
@@ -27,7 +27,7 @@ def laptops():
     if 'admin' in session:
         return redirect(url_for('admin.dashboard'))
     else:
-        laptops = Laptop.query.outerjoin(CheckedOut).filter(not_(CheckedOut.id.isnot(None))).all()
+        laptops = Laptop.query.outerjoin(CheckedOut).filter(or_(CheckedOut.id.is_(None), CheckedOut.returned.is_(True))).all()
         return render_template('laptopList.html', laptops=laptops)
     
 @app.route("/laptops/<int:id>")
@@ -42,9 +42,10 @@ def laptop(id):
 def returnLaptop():
     if request.method == 'POST':
         tagNum = int(request.form['tag'])
+        coyoteID = request.form['coyoteID']
         laptop = Laptop.query.filter_by(tag=tagNum).first()
         if laptop:
-            inUse = CheckedOut.query.filter_by(laptop_id=laptop.id).first()
+            inUse = inUse = CheckedOut.query.filter_by(laptop_id=laptop.id, user_coyoteID=coyoteID ).order_by(CheckedOut.checked_out_date.desc()).first()
             if inUse:
                 if inUse.returned == True:
                     return render_template('returnpage.html', error="Laptop is not checked out")
@@ -54,15 +55,18 @@ def returnLaptop():
                     flash('Laptop returned successfully', 'success')
                     return redirect(url_for('returnLaptop', returned=True))
             else:
-                return render_template('returnpage.html', error="Laptop is not checked out")
+                flash('Laptop is not checked out', 'danger')
+                return render_template('returnpage.html')
         else:
-            return render_template('returnpage.html', error="Laptop does not exist")
+            flash('Laptop does not exist', 'danger')
+            return render_template('returnpage.html')
+    if 'admin' in session:
+        return redirect(url_for('admin.dashboard'))
+    else:
+        return render_template('returnpage.html')
 
 
-    return render_template('returnpage.html')
-
-
-@app.route("/checkout/<id>" , methods=['GET', 'POST'])
+@app.route("/checkout/<int:id>" , methods=['GET', 'POST'])
 def checkout(id):
     laptop = Laptop.query.get(id)
     if request.method == 'POST':
@@ -84,7 +88,8 @@ def checkout(id):
 
 @app.route("/success")
 def success():
-    return render_template('success.html')
+    returnDate = request.args.get('returnDate')
+    return render_template('success.html', returnDate=returnDate)
 
 @app.route("/uploads/<filename>", methods=['GET', 'POST'])
 def uploads(filename):
@@ -93,8 +98,4 @@ def uploads(filename):
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-        admin = Admin(username='admin', password=generate_password_hash("password"))
-        db.session.add(admin)
-        db.session.commit()
-
-    app.run(debug=True)
+    app.run()
