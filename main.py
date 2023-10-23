@@ -8,9 +8,11 @@ import os
 from datetime import datetime
 from sqlalchemy import or_
 
+base_dir = os.path.relpath(os.path.dirname(__file__))
+
 app.register_blueprint(adminBP)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///laptop.db'
-app.config['UPLOAD_FOLDER'] = './uploads'
+app.config['UPLOAD_FOLDER'] = "/uploads"
 app.config['SECRET_KEY'] = secrets.token_hex(16)
 
 db.init_app(app)
