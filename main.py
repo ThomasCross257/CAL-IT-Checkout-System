@@ -1,18 +1,18 @@
 from app import app
 from flask import redirect, url_for, render_template, session, request, send_from_directory, flash
 from admin.admin import adminBP
-import bcrypt
 from models.db_model import db, CheckedOut, Laptop, Admin
 import secrets
 import os
 from datetime import datetime
 from sqlalchemy import or_
+from sqlalchemy.exc import SQLAlchemyError
 
 base_dir = os.path.relpath(os.path.dirname(__file__))
 
 app.register_blueprint(adminBP)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///laptop.db'
-app.config['UPLOAD_FOLDER'] = "/uploads"
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')
+app.config['UPLOAD_FOLDER'] = "uploads"
 app.config['SECRET_KEY'] = secrets.token_hex(16)
 
 db.init_app(app)
