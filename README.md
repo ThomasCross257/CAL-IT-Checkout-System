@@ -3,7 +3,7 @@ Laptop checkout system for the CSUSB College of Arts and Letters
 
 <hr/>
 
-##Debug locally
+## Debug locally
 <p>Make a dotenv file with a postgres DB URI</p>
 
 ```
