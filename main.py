@@ -6,7 +6,6 @@ import secrets
 import os
 from datetime import datetime
 from sqlalchemy import or_
-from sqlalchemy.exc import SQLAlchemyError
 
 base_dir = os.path.relpath(os.path.dirname(__file__))
 
@@ -29,9 +28,9 @@ def laptops():
     if 'admin' in session:
         return redirect(url_for('admin.dashboard'))
     else:
-        laptops = Laptop.query.outerjoin(CheckedOut).filter(or_(CheckedOut.id.is_(None), CheckedOut.returned.is_(True))).all()
+        laptops = Laptop.query.outerjoin(CheckedOut).filter(
+            or_(CheckedOut.id.is_(None), CheckedOut.returned.is_(True))).all()
         return render_template('laptopList.html', laptops=laptops)
-    
 @app.route("/laptops/<int:id>")
 def laptop(id):
     if 'admin' in session:
